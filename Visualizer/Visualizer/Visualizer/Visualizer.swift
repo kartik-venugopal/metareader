@@ -31,8 +31,8 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
     
     override func awakeFromNib() {
         
-        vizView = spectrogram2D
-        spectrogram2D.show()
+        vizView = spectrogram3D
+        spectrogram3D.show()
         
         spectrogram2DMenuItem.representedObject = VisualizationType.spectrogram2D
         spectrogram3DMenuItem.representedObject = VisualizationType.spectrogram3D
@@ -90,8 +90,10 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
         let numBands = sender.selectedTag()
         
         if numBands > 0 {
+            
             FrequencyData.numBands = numBands
             spectrogram2D.numberOfBands = numBands
+            spectrogram3D.numberOfBands = numBands
         }
     }
     

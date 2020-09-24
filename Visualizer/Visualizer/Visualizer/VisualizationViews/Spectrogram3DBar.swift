@@ -18,7 +18,8 @@ class Spectrogram3DBar {
     private let sideGradientMaterial = SCNMaterial()
     private let topMaterial = SCNMaterial()
     
-    static let maxHeight: CGFloat = 3.6
+    private static let minHeight: CGFloat = 0.05
+    private static let maxHeight: CGFloat = 3.6
     
     var gradientImage: NSImage {
         
@@ -31,7 +32,7 @@ class Spectrogram3DBar {
         
         didSet {
             
-            box.height = min(Self.maxHeight, magnitude * Self.maxHeight)
+            box.height = max(Self.minHeight, min(Self.maxHeight, magnitude * Self.maxHeight))
             node.pivot = SCNMatrix4MakeTranslation(0, -(box.height / 2), 0)
             
             let scale = SCNMatrix4MakeScale(1, box.height / Self.maxHeight, 1)

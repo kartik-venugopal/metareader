@@ -89,7 +89,7 @@ class Player: NSObject, AURenderCallbackDelegate {
             FFT.instance.setUp(sampleRate: Float(sampleRate), bufferSize: self.bufferSize)
         }
         
-        playerNode.volume = 0.5
+        playerNode.volume = 1
         audioEngine.mainMixerNode.volume = 1
         playerNode.pan = 0
     }

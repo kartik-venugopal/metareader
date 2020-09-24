@@ -3,7 +3,7 @@ import SpriteKit
 class Spectrogram2D: SKView, VisualizerViewProtocol {
     
     var data: FrequencyData!
-    let magnitudeRange: ClosedRange<Float> = 0...1
+    let magnitudeRange: ClosedRange<CGFloat> = 0...1
     
     var bars: [Spectrogram2DBar] = []
     
@@ -57,7 +57,7 @@ class Spectrogram2D: SKView, VisualizerViewProtocol {
     func update() {
         
         for i in 0..<numberOfBands {
-            bars[i].magnitude = CGFloat(FrequencyData.bands[i].maxVal).clamp(to: 0...1)
+            bars[i].magnitude = CGFloat(FrequencyData.bands[i].maxVal).clamp(to: magnitudeRange)
         }
     }
 }
@@ -68,6 +68,7 @@ class Spectrogram2DBar: SKSpriteNode {
     static var endColor: NSColor = .red
     
     static var barWidth: CGFloat = 30
+    static let minHeight: CGFloat = 0.01
     
     static var numberOfBands: Int = 10 {
         
@@ -97,7 +98,7 @@ class Spectrogram2DBar: SKSpriteNode {
 //            self.yScale = max(magnitude, 0.01)
 //            run(SKAction.colorize(with: Self.startColor.interpolate(Self.endColor, magnitude),
 //                              colorBlendFactor: 1, duration: 0))
-            let partialTexture = SKTexture(rect: NSRect(x: 0, y: 0, width: 1, height: max(0.01, magnitude)), in: Self.gradientTexture)
+            let partialTexture = SKTexture(rect: NSRect(x: 0, y: 0, width: 1, height: max(Self.minHeight, magnitude)), in: Self.gradientTexture)
             run(SKAction.setTexture(partialTexture, resize: true))
         }
     }
@@ -118,7 +119,7 @@ class Spectrogram2DBar: SKSpriteNode {
         
         self.blendMode = .replace
         
-        let partialTexture = SKTexture(rect: NSRect(x: 0, y: 0, width: 1, height: max(0.01, magnitude)), in: Self.gradientTexture)
+        let partialTexture = SKTexture(rect: NSRect(x: 0, y: 0, width: 1, height: max(Self.minHeight, magnitude)), in: Self.gradientTexture)
         let textureAction = SKAction.setTexture(partialTexture, resize: true)
         let fadeInAction = SKAction.fadeIn(withDuration: 1)
         
@@ -141,7 +142,10 @@ class Spectrogram2DBar: SKSpriteNode {
         Self.endColor = endColor
         
         // Compute a new gradient image
-        gradientImage = NSImage(gradientColors: [startColor, endColor], imageSize: gradientImage.size)
+        gradientImage_10Band = NSImage(gradientColors: [startColor, endColor], imageSize: gradientImage_10Band.size)
+        gradientImage_31Band = NSImage(gradientColors: [startColor, endColor], imageSize: gradientImage_31Band.size)
+        
+        gradientImage = numberOfBands == 10 ? gradientImage_10Band : gradientImage_31Band
         gradientTexture = SKTexture(image: gradientImage)
     }
 }
