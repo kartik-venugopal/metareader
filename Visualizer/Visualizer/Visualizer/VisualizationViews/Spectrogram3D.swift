@@ -3,7 +3,7 @@ import SceneKit
 class Spectrogram3D: SCNView, VisualizerViewProtocol {
     
     var data: FrequencyData!
-    let magnitudeRange: ClosedRange<Float> = 0...1
+    let magnitudeRange: ClosedRange<CGFloat> = 0...1
     
     lazy var xMargin: CGFloat = xMargin_10Band
     let xMargin_10Band: CGFloat = 0.6
@@ -50,58 +50,72 @@ class Spectrogram3D: SCNView, VisualizerViewProtocol {
     
     let piOver180: CGFloat = CGFloat.pi / 180
     
-    let maxBarHt: CGFloat = 3.6
-    
     lazy var barThickness: CGFloat = barThickness_10Band
     let barThickness_10Band: CGFloat = 0.25
     let barThickness_31Band: CGFloat = 0.1
     
     lazy var gradientImage: NSImage = gradientImage_10Band
-    var gradientImage_10Band: NSImage = NSImage(named: "Sp-Gradient-10Band")!
+    var gradientImage_10Band: NSImage = NSImage(named: "Sp3D-Gradient-10Band")!
     var gradientImage_31Band: NSImage = NSImage(named: "Sp-Gradient-31Band")!
     
     private var startColor: NSColor = .green
     private var endColor: NSColor = .red
     
+    func presentView() {
+        
+        if self.scene == nil {
+            
+            scene = SCNScene()
+            scene?.background.contents = NSColor.black
+            
+            camera = SCNCamera()
+            cameraNode = SCNNode()
+            cameraNode.camera = camera
+
+            cameraNode.position = SCNVector3(3, 2, 4.5)
+            cameraNode.eulerAngles = SCNVector3Make(-(CGFloat.pi / 45), (CGFloat.pi / 180), 0)
+
+            scene!.rootNode.addChildNode(cameraNode)
+            
+            // MARK: Bar ---------------------------------------
+            
+            SCNTransaction.begin()
+            SCNTransaction.animationDuration = 0
+            
+            self.numberOfBands = 10
+            
+            SCNTransaction.commit()
+            
+            // MARK: Floor ---------------------------------------
+            
+            floor = SCNFloor()
+            floor.firstMaterial?.diffuse.contents = NSColor.black
+            floor.firstMaterial?.lightingModel = .physicallyBased
+
+            floorNode = SCNNode(geometry: floor)
+            scene!.rootNode.addChildNode(floorNode)
+
+            // MARK: Scene settings ---------------------------------------
+            
+            antialiasingMode = .multisampling4X
+            isJitteringEnabled = true
+            allowsCameraControl = true
+            autoenablesDefaultLighting = false
+            showsStatistics = true
+        }
+        
+        scene?.isPaused = false
+        show()
+    }
+    
+    func dismissView() {
+        scene?.isPaused = true
+        hide()
+    }
+    
     override func awakeFromNib() {
         
-        scene = SCNScene()
-        scene?.background.contents = NSColor.black
-        
-        camera = SCNCamera()
-        cameraNode = SCNNode()
-        cameraNode.camera = camera
-
-        cameraNode.position = SCNVector3(3, 2, 4.5)
-        cameraNode.eulerAngles = SCNVector3Make(-(CGFloat.pi / 45), (CGFloat.pi / 180), 0)
-
-        scene!.rootNode.addChildNode(cameraNode)
-        
-        // MARK: Bar ---------------------------------------
-        
-        SCNTransaction.begin()
-        SCNTransaction.animationDuration = 0
-        
-        self.numberOfBands = 10
-        
-        SCNTransaction.commit()
-        
-        // MARK: Floor ---------------------------------------
-        
-        floor = SCNFloor()
-        floor.firstMaterial?.diffuse.contents = NSColor.black
-        floor.firstMaterial?.lightingModel = .physicallyBased
-
-        floorNode = SCNNode(geometry: floor)
-        scene!.rootNode.addChildNode(floorNode)
-
-        // MARK: Scene settings ---------------------------------------
-        
-        antialiasingMode = .multisampling4X
-        isJitteringEnabled = true
-        allowsCameraControl = true
-        autoenablesDefaultLighting = false
-        showsStatistics = false
+        print("\nCurrent Spec 3D scene: \(self.scene)")
     }
     
     func update() {
@@ -109,10 +123,8 @@ class Spectrogram3D: SCNView, VisualizerViewProtocol {
         SCNTransaction.begin()
         SCNTransaction.animationDuration = 0
         
-//        bars[0].magnitude = CGFloat(1)
-        
         for i in 0..<numberOfBands {
-            bars[i].magnitude = CGFloat(FrequencyData.bands[i].maxVal)
+            bars[i].magnitude = CGFloat(FrequencyData.bands[i].maxVal).clamp(to: magnitudeRange)
         }
             
         SCNTransaction.commit()
@@ -131,5 +143,6 @@ class Spectrogram3D: SCNView, VisualizerViewProtocol {
         
         gradientImage = numberOfBands == 10 ? gradientImage_10Band : gradientImage_31Band
         bars.forEach {$0.gradientImage = gradientImage}
+//        bars.forEach {$0.colorsUpdated()}
     }
 }

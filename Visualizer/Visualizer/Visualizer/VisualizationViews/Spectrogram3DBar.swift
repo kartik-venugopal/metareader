@@ -6,7 +6,7 @@ class Spectrogram3DBar {
     static var endColor: NSColor = .red
     
     static let bottomMaterial: SCNMaterial = {
-        
+
         let material = SCNMaterial()
         material.diffuse.contents = NSColor.black
         return material
@@ -19,7 +19,7 @@ class Spectrogram3DBar {
     private let topMaterial = SCNMaterial()
     
     private static let minHeight: CGFloat = 0.05
-    private static let maxHeight: CGFloat = 3.6
+    private static let maxHeight: CGFloat = 4
     
     var gradientImage: NSImage {
         
@@ -38,7 +38,6 @@ class Spectrogram3DBar {
             let scale = SCNMatrix4MakeScale(1, box.height / Self.maxHeight, 1)
             sideGradientMaterial.diffuse.contentsTransform = SCNMatrix4Translate(scale, 0, (Self.maxHeight - box.height) / Self.maxHeight, 0)
             
-            box.materials[4] = topMaterial
             topMaterial.diffuse.contents = Self.startColor.interpolate(Self.endColor, magnitude)
         }
     }
@@ -57,11 +56,18 @@ class Spectrogram3DBar {
         self.sideGradientMaterial.diffuse.contents = self.gradientImage
         
         self.box.materials = [sideGradientMaterial, sideGradientMaterial, sideGradientMaterial, sideGradientMaterial, topMaterial, Self.bottomMaterial]
+//        box.firstMaterial?.diffuse.contents = Self.startColor.interpolate(Self.endColor, magnitude)
         
         let scale = SCNMatrix4MakeScale(1, box.height / Self.maxHeight, 1)
         sideGradientMaterial.diffuse.contentsTransform = SCNMatrix4Translate(scale, 0, (Self.maxHeight - box.height) / Self.maxHeight, 0)
         
         box.materials[4] = topMaterial
         topMaterial.diffuse.contents = Self.startColor.interpolate(Self.endColor, magnitude)
+        
+        print("\nSize of Bar image: \(gradientImage.size)")
+    }
+    
+    func colorsUpdated() {
+        box.firstMaterial?.diffuse.contents = Self.startColor.interpolate(Self.endColor, magnitude)
     }
 }

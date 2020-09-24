@@ -14,49 +14,62 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
     
     let gradientImage: NSImage = NSImage(named: "DiscoBall")!
     
-    override func awakeFromNib() {
+    func presentView() {
         
-        self.scene = SCNScene()
-        scene?.background.contents = NSColor.black
-        
-        camera = SCNCamera()
-        cameraNode = SCNNode()
-        cameraNode.camera = camera
+        if self.scene == nil {
+            
+            self.scene = SCNScene()
+            scene?.background.contents = NSColor.black
+            
+            camera = SCNCamera()
+            cameraNode = SCNNode()
+            cameraNode.camera = camera
 
-        // This one WORKS !!!
-        cameraNode.position = SCNVector3(1, 4.25, 3.5)
-        
-        cameraNode.eulerAngles = SCNVector3Make(-(CGFloat.pi / 4), 0, 0)
+            cameraNode.position = SCNVector3(1, 4.25, 3.5)
+            cameraNode.eulerAngles = SCNVector3Make(-(CGFloat.pi / 4), 0, 0)
 
-        scene!.rootNode.addChildNode(cameraNode)
-        
-        ball = SCNSphere(radius: 1)
-        node = SCNNode(geometry: ball)
-        node.opacity = 0
-        
-        node.position = SCNVector3(1, 2, 1)
-        ball.firstMaterial?.diffuse.contents = gradientImage.tinting(startColor)
-        ball.firstMaterial?.diffuse.wrapS = .clamp
-        ball.firstMaterial?.diffuse.wrapT = .clamp
-        
-        scene!.rootNode.addChildNode(node)
-        
-        floor = SCNFloor()
-        floor.firstMaterial?.diffuse.contents = NSColor.black
-        floor.firstMaterial?.lightingModel = .physicallyBased
+            scene!.rootNode.addChildNode(cameraNode)
+            
+            ball = SCNSphere(radius: 1)
+            node = SCNNode(geometry: ball)
+            node.opacity = 0
+            
+            node.position = SCNVector3(1, 2, 1)
+            ball.firstMaterial?.diffuse.contents = gradientImage.tinting(startColor)
+            ball.firstMaterial?.diffuse.wrapS = .clamp
+            ball.firstMaterial?.diffuse.wrapT = .clamp
+            
+            scene!.rootNode.addChildNode(node)
+            
+            floor = SCNFloor()
+            floor.firstMaterial?.diffuse.contents = NSColor.black
+            floor.firstMaterial?.lightingModel = .physicallyBased
 
-        floorNode = SCNNode(geometry: floor)
-        scene!.rootNode.addChildNode(floorNode)
-        
-        antialiasingMode = .multisampling4X
-        isJitteringEnabled = true
-        allowsCameraControl = true
-        autoenablesDefaultLighting = false
-        showsStatistics = false
-        
-        for level in 0...10 {
-            textureCache.append(gradientImage.tinting(startColor.interpolate(endColor, CGFloat(level) * 0.1)))
+            floorNode = SCNNode(geometry: floor)
+            scene!.rootNode.addChildNode(floorNode)
+            
+            antialiasingMode = .multisampling4X
+            isJitteringEnabled = true
+            allowsCameraControl = true
+            autoenablesDefaultLighting = false
+            showsStatistics = false
+            
+            for level in 0...10 {
+                textureCache.append(gradientImage.tinting(startColor.interpolate(endColor, CGFloat(level) * 0.1)))
+            }
         }
+        
+        scene?.isPaused = false
+        show()
+    }
+    
+    func dismissView() {
+        scene?.isPaused = true
+        hide()
+    }
+    
+    override func awakeFromNib() {
+        print("\nCurrent Disco Ball scene: \(self.scene)")
     }
     
     func updateTextureCache() {
@@ -103,6 +116,8 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
         self.startColor = startColor
         self.endColor = endColor
         
-        updateTextureCache()
+        if !self.isHidden {
+            updateTextureCache()
+        }
     }
 }

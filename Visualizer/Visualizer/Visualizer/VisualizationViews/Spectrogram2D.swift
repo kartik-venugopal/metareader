@@ -1,6 +1,21 @@
 import SpriteKit
 
-class Spectrogram2D: SKView, VisualizerViewProtocol {
+class AuralSKView: SKView {
+    
+    override func draw(_ dirtyRect: NSRect) {
+        
+        if self.scene == nil {
+            
+            NSColor.black.setFill()
+            dirtyRect.fill()
+            
+        } else {
+            super.draw(dirtyRect)
+        }
+    }
+}
+
+class Spectrogram2D: AuralSKView, VisualizerViewProtocol {
     
     var data: FrequencyData!
     let magnitudeRange: ClosedRange<CGFloat> = 0...1
@@ -20,6 +35,7 @@ class Spectrogram2D: SKView, VisualizerViewProtocol {
             spacing = numberOfBands == 10 ? 10 : 2
             
             self.isPaused = true
+            
             bars.removeAll()
             scene?.removeAllChildren()
             
@@ -34,16 +50,33 @@ class Spectrogram2D: SKView, VisualizerViewProtocol {
         }
     }
     
+    func presentView() {
+        
+        if self.scene == nil {
+            
+            let scene = SKScene(size: self.bounds.size)
+            scene.anchorPoint = CGPoint.zero
+            scene.backgroundColor = NSColor.black
+            presentScene(scene)
+            
+            numberOfBands = 10
+        }
+        
+        scene?.isPaused = false
+        scene?.isHidden = false
+        show()
+    }
+    
+    func dismissView() {
+
+        scene?.isPaused = true
+        scene?.isHidden = true
+        hide()
+    }
+    
     override func awakeFromNib() {
         
-        AppDelegate.play = true
-        
-        let scene = SKScene(size: self.bounds.size)
-        scene.anchorPoint = CGPoint(x: 0, y: 0)
-        scene.backgroundColor = NSColor.black
-        presentScene(scene)
-        
-        numberOfBands = 10
+        print("\nCurrent Spec 2D scene: \(self.scene)")
     }
     
     func setColors(startColor: NSColor, endColor: NSColor) {

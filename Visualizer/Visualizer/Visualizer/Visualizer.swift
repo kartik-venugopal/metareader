@@ -7,7 +7,9 @@ protocol VisualizerViewProtocol {
     
     func setColors(startColor: NSColor, endColor: NSColor)
     
-//    func presentView()
+    func presentView()
+    
+    func dismissView()
 }
 
 class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
@@ -31,8 +33,7 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
     
     override func awakeFromNib() {
         
-        vizView = spectrogram3D
-        spectrogram3D.show()
+        AppDelegate.play = true
         
         spectrogram2DMenuItem.representedObject = VisualizationType.spectrogram2D
         spectrogram3DMenuItem.representedObject = VisualizationType.spectrogram3D
@@ -49,38 +50,38 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
             case .spectrogram2D:
                 
                 vizView = spectrogram2D
-                spectrogram2D.show()
+                spectrogram2D.presentView()
                 
-                spectrogram3D.hide()
-                supernova.hide()
-                discoBall.hide()
+                spectrogram3D.dismissView()
+                supernova.dismissView()
+                discoBall.dismissView()
                 
             case .spectrogram3D:
                 
                 vizView = spectrogram3D
-                spectrogram3D.show()
+                spectrogram3D.presentView()
                 
-                spectrogram2D.hide()
-                supernova.hide()
-                discoBall.hide()
+                spectrogram2D.dismissView()
+                supernova.dismissView()
+                discoBall.dismissView()
                 
             case .supernova:
                 
                 vizView = supernova
-                supernova.show()
+                supernova.presentView()
                 
-                spectrogram2D.hide()
-                spectrogram3D.hide()
-                discoBall.hide()
+                spectrogram2D.dismissView()
+                spectrogram3D.dismissView()
+                discoBall.dismissView()
                 
             case .discoBall:
                 
                 vizView = discoBall
-                discoBall.show()
+                discoBall.presentView()
                 
-                spectrogram2D.hide()
-                spectrogram3D.hide()
-                supernova.hide()
+                spectrogram2D.dismissView()
+                spectrogram3D.dismissView()
+                supernova.dismissView()
             }
         }
     }
