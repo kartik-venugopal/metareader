@@ -24,10 +24,8 @@
                 <outlet property="discoBall" destination="KnR-PS-KmV" id="azu-fg-E0R"/>
                 <outlet property="discoBallMenuItem" destination="lbz-E4-j54" id="6dS-5p-1xi"/>
                 <outlet property="endColorPicker" destination="wuG-Gq-SRd" id="R1l-eH-OrU"/>
-                <outlet property="spectrogram2D" destination="EVQ-ep-qMN" id="w7A-5T-SNW"/>
-                <outlet property="spectrogram2DMenuItem" destination="zI0-Ad-uiR" id="9kJ-WA-hj3"/>
-                <outlet property="spectrogram3D" destination="zOw-rT-vFu" id="7lh-Ej-uWd"/>
-                <outlet property="spectrogram3DMenuItem" destination="Phs-1G-S8d" id="qHz-xT-4AL"/>
+                <outlet property="spectrogram" destination="zOw-rT-vFu" id="iAj-Uj-Vd4"/>
+                <outlet property="spectrogramMenuItem" destination="zI0-Ad-uiR" id="9kJ-WA-hj3"/>
                 <outlet property="startColorPicker" destination="twU-LC-Ua9" id="WP7-DA-I4c"/>
                 <outlet property="supernova" destination="Vg6-j7-uzR" id="mBw-03-VIL"/>
                 <outlet property="supernovaMenuItem" destination="7XX-uN-VD7" id="YiV-w4-5dx"/>
@@ -699,7 +697,7 @@
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ey4-rN-jj6" userLabel="Visualization Type Menu">
                         <rect key="frame" x="162" y="358" width="301" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="Supernova" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="7XX-uN-VD7" id="fns-gR-DQ8">
+                        <popUpButtonCell key="cell" type="push" title="Spectrogram" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="zI0-Ad-uiR" id="fns-gR-DQ8">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <menu key="menu" id="kLv-ho-9nJ">
@@ -707,13 +705,10 @@
                                     <menuItem title="Spectrogram" id="zI0-Ad-uiR">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
-                                    <menuItem title="Spectrogram (3D)" id="Phs-1G-S8d">
-                                        <modifierMask key="keyEquivalentModifierMask"/>
-                                    </menuItem>
                                     <menuItem title="Supernova" state="on" id="7XX-uN-VD7">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
-                                    <menuItem title="Disco Ball (3D)" id="lbz-E4-j54">
+                                    <menuItem title="Disco Ball" id="lbz-E4-j54">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
                                 </items>
@@ -723,11 +718,7 @@
                             <action selector="changeTypeAction:" target="QkM-WI-cqD" id="uiC-fD-67G"/>
                         </connections>
                     </popUpButton>
-                    <customView hidden="YES" id="zOw-rT-vFu" userLabel="2D Spectrogram" customClass="Spectrogram3D" customModule="Visualizer" customModuleProvider="target">
-                        <rect key="frame" x="20" y="20" width="440" height="320"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    </customView>
-                    <customView hidden="YES" id="EVQ-ep-qMN" userLabel="3D Spectrogram" customClass="Spectrogram2D" customModule="Visualizer" customModuleProvider="target">
+                    <customView hidden="YES" id="zOw-rT-vFu" userLabel="Spectrogram" customClass="Spectrogram" customModule="Visualizer" customModuleProvider="target">
                         <rect key="frame" x="20" y="20" width="440" height="320"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </customView>

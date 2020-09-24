@@ -12,6 +12,7 @@
 		3E5E408A251A91D0000E40EA /* Supernova.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E4089251A91D0000E40EA /* Supernova.swift */; };
 		3E7728F2251B2E930024607F /* DiscoBall.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E7728F1251B2E930024607F /* DiscoBall.swift */; };
 		3E82035C2516050400A1C6E1 /* Visualizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E82035B2516050400A1C6E1 /* Visualizer.swift */; };
+		3ECCFA3C251CE5F100305A7E /* Spectrogram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECCFA3B251CE5F100305A7E /* Spectrogram.swift */; };
 		3EF18434217C78C400D24F39 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF18433217C78C400D24F39 /* AppDelegate.swift */; };
 		3EF18436217C78C500D24F39 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3EF18435217C78C500D24F39 /* Assets.xcassets */; };
 		3EF18439217C78C500D24F39 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EF18437217C78C500D24F39 /* MainMenu.xib */; };
@@ -20,7 +21,6 @@
 		3EF1846C217C8C3B00D24F39 /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF18466217C8C3B00D24F39 /* Player.swift */; };
 		3EF1846E217C8C3B00D24F39 /* FrequencyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF18468217C8C3B00D24F39 /* FrequencyData.swift */; };
 		3EF18473217C8C6300D24F39 /* FFT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF18472217C8C6300D24F39 /* FFT.swift */; };
-		3EF27BDF2517C8840068E566 /* Spectrogram2D.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF27BDE2517C8840068E566 /* Spectrogram2D.swift */; };
 		3EF635792517C04E00AC8314 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF635782517C04E00AC8314 /* Utils.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,6 +47,7 @@
 		3E5E4089251A91D0000E40EA /* Supernova.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Supernova.swift; sourceTree = "<group>"; };
 		3E7728F1251B2E930024607F /* DiscoBall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoBall.swift; sourceTree = "<group>"; };
 		3E82035B2516050400A1C6E1 /* Visualizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Visualizer.swift; sourceTree = "<group>"; };
+		3ECCFA3B251CE5F100305A7E /* Spectrogram.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Spectrogram.swift; sourceTree = "<group>"; };
 		3EF18430217C78C400D24F39 /* Visualizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Visualizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EF18433217C78C400D24F39 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3EF18435217C78C500D24F39 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -62,7 +63,6 @@
 		3EF18466217C8C3B00D24F39 /* Player.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
 		3EF18468217C8C3B00D24F39 /* FrequencyData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrequencyData.swift; sourceTree = "<group>"; };
 		3EF18472217C8C6300D24F39 /* FFT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FFT.swift; sourceTree = "<group>"; };
-		3EF27BDE2517C8840068E566 /* Spectrogram2D.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Spectrogram2D.swift; sourceTree = "<group>"; };
 		3EF635782517C04E00AC8314 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,20 +94,21 @@
 		3E26E7B72517B0E0007A9757 /* VisualizationViews */ = {
 			isa = PBXGroup;
 			children = (
-				3EF27BDE2517C8840068E566 /* Spectrogram2D.swift */,
-				3E410B7E25167F0800BCBF57 /* Spectrogram3D.swift */,
-				3E26E7B82517B231007A9757 /* Spectrogram3DBar.swift */,
+				3ECCFA3B251CE5F100305A7E /* Spectrogram.swift */,
 				3E5E4089251A91D0000E40EA /* Supernova.swift */,
 				3E7728F1251B2E930024607F /* DiscoBall.swift */,
+				3EC58CB4251CCADD008D5E9B /* Experimental */,
 			);
 			path = VisualizationViews;
 			sourceTree = "<group>";
 		};
-		3EB4B671251B8FA000E3511F /* Spectrogram3D */ = {
+		3EC58CB4251CCADD008D5E9B /* Experimental */ = {
 			isa = PBXGroup;
 			children = (
+				3E410B7E25167F0800BCBF57 /* Spectrogram3D.swift */,
+				3E26E7B82517B231007A9757 /* Spectrogram3DBar.swift */,
 			);
-			path = Spectrogram3D;
+			path = Experimental;
 			sourceTree = "<group>";
 		};
 		3EF18427217C78C400D24F39 = {
@@ -133,7 +134,6 @@
 		3EF18432217C78C400D24F39 /* Visualizer */ = {
 			isa = PBXGroup;
 			children = (
-				3EB4B671251B8FA000E3511F /* Spectrogram3D */,
 				3EF18437217C78C500D24F39 /* MainMenu.xib */,
 				3EF18433217C78C400D24F39 /* AppDelegate.swift */,
 				3E82035B2516050400A1C6E1 /* Visualizer.swift */,
@@ -301,8 +301,8 @@
 				3E82035C2516050400A1C6E1 /* Visualizer.swift in Sources */,
 				3EF635792517C04E00AC8314 /* Utils.swift in Sources */,
 				3E5E408A251A91D0000E40EA /* Supernova.swift in Sources */,
-				3EF27BDF2517C8840068E566 /* Spectrogram2D.swift in Sources */,
 				3E26E7B92517B231007A9757 /* Spectrogram3DBar.swift in Sources */,
+				3ECCFA3C251CE5F100305A7E /* Spectrogram.swift in Sources */,
 				3E7728F2251B2E930024607F /* DiscoBall.swift in Sources */,
 				3EF18473217C8C6300D24F39 /* FFT.swift in Sources */,
 				3EF1846E217C8C3B00D24F39 /* FrequencyData.swift in Sources */,

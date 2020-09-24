@@ -68,10 +68,6 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
         hide()
     }
     
-    override func awakeFromNib() {
-        print("\nCurrent Disco Ball scene: \(self.scene)")
-    }
-    
     func updateTextureCache() {
         
         for level in 0...10 {

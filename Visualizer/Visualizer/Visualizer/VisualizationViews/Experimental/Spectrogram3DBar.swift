@@ -63,8 +63,6 @@ class Spectrogram3DBar {
         
         box.materials[4] = topMaterial
         topMaterial.diffuse.contents = Self.startColor.interpolate(Self.endColor, magnitude)
-        
-        print("\nSize of Bar image: \(gradientImage.size)")
     }
     
     func colorsUpdated() {

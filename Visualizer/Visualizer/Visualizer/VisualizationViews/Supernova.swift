@@ -3,7 +3,7 @@ import SpriteKit
 class Supernova: AuralSKView, VisualizerViewProtocol {
     
     var ring: SKShapeNode!
-    private var gradientImage: NSImage = NSImage(named: "BallTex")!
+    private lazy var gradientImage: NSImage = NSImage(named: "Supernova")!
     private lazy var gradientTexture = SKTexture(image: gradientImage)
     
     func presentView() {
@@ -22,6 +22,7 @@ class Supernova: AuralSKView, VisualizerViewProtocol {
             ring.strokeColor = startColor
             ring.lineWidth = 75
             ring.glowWidth = 50
+            
             ring.alpha = 0
 
             ring.yScale = 1
@@ -44,10 +45,6 @@ class Supernova: AuralSKView, VisualizerViewProtocol {
         scene?.isPaused = true
         scene?.isHidden = true
         hide()
-    }
-    
-    override func awakeFromNib() {
-        print("\nCurrent Supernova scene: \(self.scene)")
     }
     
     var startColor: NSColor = .green

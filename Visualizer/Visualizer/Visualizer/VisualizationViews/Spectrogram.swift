@@ -20,7 +20,7 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
     var data: FrequencyData!
     let magnitudeRange: ClosedRange<CGFloat> = 0...1
     
-    var bars: [Spectrogram2DBar] = []
+    var bars: [SpectrogramBar] = []
     
     var xMargin: CGFloat = 25
     var yMargin: CGFloat = 20
@@ -31,7 +31,7 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
         
         didSet {
             
-            Spectrogram2DBar.numberOfBands = numberOfBands
+            SpectrogramBar.numberOfBands = numberOfBands
             spacing = numberOfBands == 10 ? 10 : 2
             
             self.isPaused = true
@@ -41,7 +41,7 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
             
             for i in 0..<numberOfBands {
             
-                let bar = Spectrogram2DBar(position: NSPoint(x: (CGFloat(i) * (Spectrogram2DBar.barWidth + spacing)) + xMargin, y: yMargin))
+                let bar = SpectrogramBar(position: NSPoint(x: (CGFloat(i) * (SpectrogramBar.barWidth + spacing)) + xMargin, y: yMargin))
                 bars.append(bar)
                 scene?.addChild(bar)
             }
@@ -61,6 +61,9 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
             
             numberOfBands = 10
         }
+
+        scene?.alpha = 0
+        scene?.run(SKAction.fadeIn(withDuration: 1))
         
         scene?.isPaused = false
         scene?.isHidden = false
@@ -75,9 +78,7 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
     }
     
     func setColors(startColor: NSColor, endColor: NSColor) {
-        
-        Spectrogram2DBar.setColors(startColor: startColor, endColor: endColor)
-        bars.forEach {$0.colorsUpdated()}
+        SpectrogramBar.setColors(startColor: startColor, endColor: endColor)
     }
     
     // TODO: Test this with random mags (with a button to trigger an iteration)
@@ -90,12 +91,15 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
     }
 }
 
-class Spectrogram2DBar: SKSpriteNode {
+class SpectrogramBar: SKSpriteNode {
     
     static var startColor: NSColor = .green
     static var endColor: NSColor = .red
     
-    static var barWidth: CGFloat = 30
+    static var barWidth: CGFloat = barWidth_10Band
+    static let barWidth_10Band: CGFloat = 30
+    static let barWidth_31Band: CGFloat = 13
+    
     static let minHeight: CGFloat = 0.01
     
     static var numberOfBands: Int = 10 {
@@ -103,7 +107,7 @@ class Spectrogram2DBar: SKSpriteNode {
         didSet {
             
             gradientImage = numberOfBands == 10 ? gradientImage_10Band : gradientImage_31Band
-            barWidth = numberOfBands == 10 ? 30 : 10
+            barWidth = numberOfBands == 10 ? barWidth_10Band : barWidth_31Band
         }
     }
     
@@ -135,7 +139,6 @@ class Spectrogram2DBar: SKSpriteNode {
         super.init(texture: Self.gradientTexture, color: Self.startColor, size: Self.gradientImage.size)
         
         self.yScale = 1
-        self.alpha = 0
 
         self.anchorPoint = NSPoint.zero
         self.position = position
@@ -143,10 +146,7 @@ class Spectrogram2DBar: SKSpriteNode {
         self.blendMode = .replace
         
         let partialTexture = SKTexture(rect: NSRect(x: 0, y: 0, width: 1, height: max(Self.minHeight, magnitude)), in: Self.gradientTexture)
-        let textureAction = SKAction.setTexture(partialTexture, resize: true)
-        let fadeInAction = SKAction.fadeIn(withDuration: 1)
-        
-        run(SKAction.sequence([textureAction, fadeInAction]))
+        run(SKAction.setTexture(partialTexture, resize: true))
     }
     
     required init?(coder aDecoder: NSCoder) {

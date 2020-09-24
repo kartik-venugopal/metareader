@@ -14,14 +14,12 @@ protocol VisualizerViewProtocol {
 
 class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
     
-    @IBOutlet weak var spectrogram2D: Spectrogram2D!
-    @IBOutlet weak var spectrogram3D: Spectrogram3D!
+    @IBOutlet weak var spectrogram: Spectrogram!
     @IBOutlet weak var supernova: Supernova!
     @IBOutlet weak var discoBall: DiscoBall!
     
     @IBOutlet weak var typeMenu: NSMenu!
-    @IBOutlet weak var spectrogram2DMenuItem: NSMenuItem!
-    @IBOutlet weak var spectrogram3DMenuItem: NSMenuItem!
+    @IBOutlet weak var spectrogramMenuItem: NSMenuItem!
     @IBOutlet weak var supernovaMenuItem: NSMenuItem!
     @IBOutlet weak var discoBallMenuItem: NSMenuItem!
     
@@ -35,8 +33,7 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
         
         AppDelegate.play = true
         
-        spectrogram2DMenuItem.representedObject = VisualizationType.spectrogram2D
-        spectrogram3DMenuItem.representedObject = VisualizationType.spectrogram3D
+        spectrogramMenuItem.representedObject = VisualizationType.spectrogram
         supernovaMenuItem.representedObject = VisualizationType.supernova
         discoBallMenuItem.representedObject = VisualizationType.discoBall
     }
@@ -47,21 +44,11 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
             
             switch vizType {
                 
-            case .spectrogram2D:
+            case .spectrogram:
                 
-                vizView = spectrogram2D
-                spectrogram2D.presentView()
+                vizView = spectrogram
+                spectrogram.presentView()
                 
-                spectrogram3D.dismissView()
-                supernova.dismissView()
-                discoBall.dismissView()
-                
-            case .spectrogram3D:
-                
-                vizView = spectrogram3D
-                spectrogram3D.presentView()
-                
-                spectrogram2D.dismissView()
                 supernova.dismissView()
                 discoBall.dismissView()
                 
@@ -70,8 +57,7 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
                 vizView = supernova
                 supernova.presentView()
                 
-                spectrogram2D.dismissView()
-                spectrogram3D.dismissView()
+                spectrogram.dismissView()
                 discoBall.dismissView()
                 
             case .discoBall:
@@ -79,8 +65,7 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
                 vizView = discoBall
                 discoBall.presentView()
                 
-                spectrogram2D.dismissView()
-                spectrogram3D.dismissView()
+                spectrogram.dismissView()
                 supernova.dismissView()
             }
         }
@@ -93,8 +78,7 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
         if numBands > 0 {
             
             FrequencyData.numBands = numBands
-            spectrogram2D.numberOfBands = numBands
-            spectrogram3D.numberOfBands = numBands
+            spectrogram.numberOfBands = numBands
         }
     }
     
@@ -105,9 +89,12 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
 //        if FrequencyData.numBands != 10 {
 //            NSLog("Bands: \(FrequencyData.bands.map {$0.maxVal})")
 //        }
-
-        DispatchQueue.main.async {
-            self.vizView?.update()
+        
+        if let theVizView = vizView {
+            
+            DispatchQueue.main.async {
+                theVizView.update()
+            }
         }
     }
     
@@ -115,7 +102,7 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
         
         vizView.setColors(startColor: self.startColorPicker.color, endColor: self.endColorPicker.color)
         
-        [spectrogram2D, spectrogram3D, supernova, discoBall].forEach {
+        [spectrogram, supernova, discoBall].forEach {
             
             if $0 !== (vizView as! NSView) {
                 ($0 as? VisualizerViewProtocol)?.setColors(startColor: self.startColorPicker.color, endColor: self.endColorPicker.color)
@@ -126,5 +113,5 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
 
 enum VisualizationType {
     
-    case spectrogram2D, spectrogram3D, supernova, discoBall
+    case spectrogram, supernova, discoBall
 }
