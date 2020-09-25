@@ -677,16 +677,16 @@
         <window title="Visualizer" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g" userLabel="Visualizer Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="653" height="400"/>
+            <rect key="contentRect" x="335" y="390" width="577" height="442"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
             <value key="minSize" type="size" width="653" height="400"/>
             <value key="maxSize" type="size" width="653" height="400"/>
             <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="653" height="400"/>
+                <rect key="frame" x="0.0" y="0.0" width="577" height="442"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XI2-df-obx">
-                        <rect key="frame" x="20" y="359" width="133" height="21"/>
+                        <rect key="frame" x="20" y="401" width="133" height="21"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" lineBreakMode="clipping" title="Visualization Type:" id="BYJ-gb-YTz">
                             <font key="font" metaFont="system"/>
@@ -695,17 +695,17 @@
                         </textFieldCell>
                     </textField>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ey4-rN-jj6" userLabel="Visualization Type Menu">
-                        <rect key="frame" x="162" y="358" width="301" height="25"/>
+                        <rect key="frame" x="162" y="400" width="386" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="Spectrogram" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="zI0-Ad-uiR" id="fns-gR-DQ8">
+                        <popUpButtonCell key="cell" type="push" title="Spectrogram" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="zI0-Ad-uiR" id="fns-gR-DQ8">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <menu key="menu" id="kLv-ho-9nJ">
                                 <items>
-                                    <menuItem title="Spectrogram" id="zI0-Ad-uiR">
+                                    <menuItem title="Spectrogram" state="on" id="zI0-Ad-uiR">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
-                                    <menuItem title="Supernova" state="on" id="7XX-uN-VD7">
+                                    <menuItem title="Supernova" id="7XX-uN-VD7">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                     </menuItem>
                                     <menuItem title="Disco Ball" id="lbz-E4-j54">
@@ -719,11 +719,11 @@
                         </connections>
                     </popUpButton>
                     <customView hidden="YES" id="zOw-rT-vFu" userLabel="Spectrogram" customClass="Spectrogram" customModule="Visualizer" customModuleProvider="target">
-                        <rect key="frame" x="20" y="20" width="440" height="320"/>
+                        <rect key="frame" x="63" y="82" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </customView>
                     <customView hidden="YES" id="Vg6-j7-uzR" customClass="Supernova" customModule="Visualizer" customModuleProvider="target">
-                        <rect key="frame" x="20" y="20" width="440" height="320"/>
+                        <rect key="frame" x="63" y="82" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="backgroundColor">
@@ -732,11 +732,11 @@
                         </userDefinedRuntimeAttributes>
                     </customView>
                     <customView hidden="YES" id="KnR-PS-KmV" customClass="DiscoBall" customModule="Visualizer" customModuleProvider="target">
-                        <rect key="frame" x="20" y="20" width="440" height="320"/>
+                        <rect key="frame" x="63" y="82" width="450" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </customView>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5CQ-3v-X3V">
-                        <rect key="frame" x="534" y="285" width="85" height="49"/>
+                        <rect key="frame" x="123" y="34" width="117" height="27"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" title="Low Amplitude" id="2uT-Qr-mEw">
                             <font key="font" metaFont="menu" size="14"/>
@@ -745,7 +745,7 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iEn-Vh-Ylz">
-                        <rect key="frame" x="534" y="220" width="90" height="49"/>
+                        <rect key="frame" x="123" y="9" width="117" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" title="High Amplitude" id="76t-DL-qI4">
                             <font key="font" metaFont="menu" size="14"/>
@@ -754,15 +754,15 @@
                         </textFieldCell>
                     </textField>
                     <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="twU-LC-Ua9">
-                        <rect key="frame" x="481" y="296" width="40" height="40"/>
+                        <rect key="frame" x="88" y="43" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <color key="color" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="color" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
                             <action selector="setColorsAction:" target="QkM-WI-cqD" id="9JP-8r-fbU"/>
                         </connections>
                     </colorWell>
                     <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wuG-Gq-SRd">
-                        <rect key="frame" x="481" y="231" width="40" height="40"/>
+                        <rect key="frame" x="88" y="15" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <color key="color" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <connections>
@@ -770,16 +770,20 @@
                         </connections>
                     </colorWell>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Mf-6C-Nww">
-                        <rect key="frame" x="479" y="187" width="125" height="25"/>
+                        <rect key="frame" x="384" y="48" width="99" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" title="Bands:" id="62n-ok-HtD">
+                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Bands:" id="62n-ok-HtD">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RJM-hm-nQb" customClass="GrImgView" customModule="Visualizer" customModuleProvider="target">
+                        <rect key="frame" x="16" y="82" width="30" height="300"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    </customView>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dhv-MV-XWF" userLabel="Bands Menu">
-                        <rect key="frame" x="479" y="165" width="100" height="25"/>
+                        <rect key="frame" x="384" y="17" width="100" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="10" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="10" imageScaling="proportionallyDown" inset="2" selectedItem="hSq-zl-GmH" id="j9Y-ew-ogL">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -806,7 +810,7 @@
                     <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="-182.5" y="-157"/>
+            <point key="canvasLocation" x="-220.5" y="-136"/>
         </window>
     </objects>
 </document>

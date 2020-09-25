@@ -47,7 +47,7 @@ class Supernova: AuralSKView, VisualizerViewProtocol {
         hide()
     }
     
-    var startColor: NSColor = .green
+    var startColor: NSColor = .blue
     var endColor: NSColor = .red
     
     func setColors(startColor: NSColor, endColor: NSColor) {
@@ -61,5 +61,7 @@ class Supernova: AuralSKView, VisualizerViewProtocol {
         let peakMagnitude = CGFloat(FrequencyData.peakBassMagnitude.clamp(to: 0...1))
         ring.strokeColor = startColor.interpolate(endColor, peakMagnitude)
         ring.run(SKAction.scale(to: peakMagnitude, duration: 0.05))
+        
+        ring.zRotation -= piOver180
     }
 }

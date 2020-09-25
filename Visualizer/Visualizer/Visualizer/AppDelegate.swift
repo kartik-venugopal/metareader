@@ -26,7 +26,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             player.outputRenderObserver = visualizer
             
             player.play(file: file)
-            player.seekToTime(seconds: 60)
+            player.seekToTime(seconds: 40)
         }
     }
     

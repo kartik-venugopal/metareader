@@ -58,7 +58,7 @@ import SceneKit
 //    var gradientImage_10Band: NSImage = NSImage(named: "Sp3D-Gradient-10Band")!
 //    var gradientImage_31Band: NSImage = NSImage(named: "Sp-Gradient-31Band")!
 //
-//    private var startColor: NSColor = .green
+//    private var startColor: NSColor = .blue
 //    private var endColor: NSColor = .red
 //
 //    func presentView() {

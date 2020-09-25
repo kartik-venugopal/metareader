@@ -26,7 +26,7 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
             cameraNode.camera = camera
 
             cameraNode.position = SCNVector3(1, 4.25, 3.5)
-            cameraNode.eulerAngles = SCNVector3Make(-(CGFloat.pi / 4), 0, 0)
+            cameraNode.eulerAngles = SCNVector3Make(-(piOver180 * 45), 0, 0)
 
             scene!.rootNode.addChildNode(cameraNode)
             
@@ -79,7 +79,7 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
         node.runAction(SCNAction.fadeIn(duration: 1))
     }
     
-    var startColor: NSColor = .green
+    var startColor: NSColor = .blue
     var endColor: NSColor = .red
     var rotation: CGFloat = 0
     
@@ -100,8 +100,8 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
         ball.firstMaterial?.diffuse.contents = textureCache[interpolationLevel]
         
         if mag > 0.3 {
-        rotation += mag * 5
-        node.rotation = SCNVector4Make(0, 1, 0, rotation * CGFloat.pi / 180.0)
+            rotation += mag * 5
+            node.rotation = SCNVector4Make(0, 1, 0, rotation * piOver180)
         }
         
         SCNTransaction.commit()

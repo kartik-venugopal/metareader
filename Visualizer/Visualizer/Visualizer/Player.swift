@@ -64,7 +64,7 @@ class Player: NSObject, AURenderCallbackDelegate {
         setUp()
     }
     
-    var bufferSize: Int = 512
+    var nativeBufferSize: UInt32 = 512
     
     func setUp() {
         
@@ -74,24 +74,58 @@ class Player: NSObject, AURenderCallbackDelegate {
         let au = audioEngine.outputNode.audioUnit!
         AudioUnitAddRenderNotify(au, renderCallback, Unmanaged.passUnretained(self).toOpaque())
         
+        // MARK: Get current device sample rate (and use it to set up FFT)
+        
+        // NOTE - In Aural, these can all go under AudioDevice / DeviceManager !!!
+        
         var sampleRate: Double = 0
         var sizeOfProp: UInt32 = UInt32(MemoryLayout<Double>.size)
         var error = AudioUnitGetProperty(au, kAudioDevicePropertyActualSampleRate, kAudioUnitScope_Global, 0, &sampleRate, &sizeOfProp)
-        if error == noErr {
-//            FFT.instance.sampleRate = Float(sampleRate)
-        }
+        
+        print("\nDevice sample rate is: \(sampleRate)")
+        
+        // MARK: Get current buffer size
+        
+        var sizeOfUInt32: UInt32 = UInt32(MemoryLayout<UInt32>.size)
+        error += AudioUnitGetProperty(au, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &nativeBufferSize, &sizeOfUInt32)
+        
+        print("\nCURRENT Device buffer size is: \(nativeBufferSize)")
+        
+        // MARK: Get size range
+        
+        var range: AudioValueRange = AudioValueRange()
+        var sizeOfRange: UInt32 = UInt32(MemoryLayout<AudioValueRange>.size)
+        error += AudioUnitGetProperty(au, kAudioDevicePropertyBufferFrameSizeRange, kAudioUnitScope_Global, 0, &range, &sizeOfRange)
+        
+        print("\nRANGE is: \(range.mMinimum) to \(range.mMaximum)")
+        
+        // MARK: Set buffer size to desired size
         
         var newBufferSize: UInt32 = 2048
-        error = AudioUnitSetProperty(au, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &newBufferSize, UInt32(MemoryLayout<UInt32>.size))
+        error += AudioUnitSetProperty(au, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &newBufferSize, sizeOfUInt32)
+        
         if error == noErr {
-            
-            self.bufferSize = Int(newBufferSize)
-            FFT.instance.setUp(sampleRate: Float(sampleRate), bufferSize: self.bufferSize)
+            FFT.instance.setUp(sampleRate: Float(sampleRate), bufferSize: Int(newBufferSize))
         }
         
         playerNode.volume = 1
-        audioEngine.mainMixerNode.volume = 1
         playerNode.pan = 0
+    }
+    
+    func restoreBufferSize() {
+        
+        let au = audioEngine.outputNode.audioUnit!
+        var sizeOfUInt32: UInt32 = UInt32(MemoryLayout<UInt32>.size)
+        var error = AudioUnitSetProperty(au, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &nativeBufferSize, sizeOfUInt32)
+        
+        var newBufferSize: UInt32 = 0
+        error += AudioUnitGetProperty(au, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &newBufferSize, &sizeOfUInt32)
+        
+        if error == noErr && newBufferSize == nativeBufferSize {
+            print("\nSuccessfully restored buffer size to \(nativeBufferSize)")
+        } else {
+            print("\nSOMETHING WENT WRONG !!!")
+        }
     }
     
     // Prepares the player to play a given track

@@ -2,7 +2,7 @@ import SceneKit
 
 class Spectrogram3DBar {
     
-    static var startColor: NSColor = .green
+    static var startColor: NSColor = .blue
     static var endColor: NSColor = .red
     
     static let bottomMaterial: SCNMaterial = {

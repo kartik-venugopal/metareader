@@ -23,7 +23,7 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
     var bars: [SpectrogramBar] = []
     
     var xMargin: CGFloat = 25
-    var yMargin: CGFloat = 20
+    var yMargin: CGFloat = 0
     
     var spacing: CGFloat = 10
     
@@ -93,7 +93,7 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
 
 class SpectrogramBar: SKSpriteNode {
     
-    static var startColor: NSColor = .green
+    static var startColor: NSColor = .blue
     static var endColor: NSColor = .red
     
     static var barWidth: CGFloat = barWidth_10Band

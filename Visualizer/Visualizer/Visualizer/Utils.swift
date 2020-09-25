@@ -132,7 +132,7 @@ class GrImgView: NSView {
     override func draw(_ dirtyRect: NSRect) {
         
         let startColor = NSColor.red
-        let endColor = NSColor.green
+        let endColor = NSColor.blue
         
         let context: CGContext! = NSGraphicsContext.current?.cgContext
         context.saveGState()
@@ -178,3 +178,5 @@ public extension NSBezierPath {
         return path
     }
 }
+
+let piOver180: CGFloat = CGFloat.pi / 180
