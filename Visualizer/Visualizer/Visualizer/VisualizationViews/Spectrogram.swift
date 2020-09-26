@@ -17,6 +17,8 @@ class AuralSKView: SKView {
 
 class Spectrogram: AuralSKView, VisualizerViewProtocol {
     
+    let type: VisualizationType = .spectrogram
+    
     var data: FrequencyData!
     
     var bars: [SpectrogramBar] = []
@@ -24,16 +26,21 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
     var xMargin: CGFloat = 25
     var yMargin: CGFloat = 20
     
-    var spacing: CGFloat = 10
+    lazy var spacing: CGFloat = spacing_10Band
+    let spacing_10Band: CGFloat = 10
+    let spacing_31Band: CGFloat = 2
     
     var numberOfBands: Int = 10 {
         
         didSet {
             
-            SpectrogramBar.numberOfBands = numberOfBands
-            spacing = numberOfBands == 10 ? 10 : 2
+            updateSemaphore.wait()
+            defer {updateSemaphore.signal()}
             
             self.isPaused = true
+            
+            SpectrogramBar.numberOfBands = numberOfBands
+            spacing = numberOfBands == 10 ? spacing_10Band : spacing_31Band
             
             bars.removeAll()
             scene?.removeAllChildren()
@@ -80,11 +87,16 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
         SpectrogramBar.setColors(startColor: startColor, endColor: endColor)
     }
     
+    private let updateSemaphore: DispatchSemaphore = DispatchSemaphore(value: 1)
+    
     // TODO: Test this with random mags (with a button to trigger an iteration)
     
     func update() {
         
-        for i in 0..<numberOfBands {
+        updateSemaphore.wait()
+        defer {updateSemaphore.signal()}
+        
+        for i in bars.indices {
             bars[i].magnitude = CGFloat(FrequencyData.bands[i].maxVal.clamp(to: fftMagnitudeRange))
         }
     }

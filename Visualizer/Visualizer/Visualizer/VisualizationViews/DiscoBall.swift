@@ -3,6 +3,8 @@ import SceneKit
 
 class DiscoBall: SCNView, VisualizerViewProtocol {
     
+    let type: VisualizationType = .discoBall
+    
     var camera: SCNCamera!
     var cameraNode: SCNNode!
     

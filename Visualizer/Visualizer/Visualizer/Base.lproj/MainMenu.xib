@@ -21,10 +21,17 @@
         </customObject>
         <customObject id="QkM-WI-cqD" customClass="Visualizer" customModule="Visualizer" customModuleProvider="target">
             <connections>
-                <outlet property="containerView" destination="bQN-qd-ooi" id="Gyd-Rd-MTy"/>
+                <outlet property="containerBox" destination="bQN-qd-ooi" id="ba3-Nb-hIB"/>
                 <outlet property="discoBall" destination="KnR-PS-KmV" id="azu-fg-E0R"/>
+                <outlet property="discoBallMenuItem" destination="6Uf-Vd-5t3" id="g84-AI-d6n"/>
+                <outlet property="endColorPicker" destination="dSt-eT-uU8" id="unp-TA-7RN"/>
+                <outlet property="optionsBox" destination="pzX-o2-Paf" id="ZoV-oU-9l9"/>
                 <outlet property="spectrogram" destination="zOw-rT-vFu" id="iAj-Uj-Vd4"/>
+                <outlet property="spectrogramMenuItem" destination="4Lr-n8-SL4" id="N7S-iI-2Xs"/>
+                <outlet property="startColorPicker" destination="LZh-k2-rk3" id="Vct-sB-Hfd"/>
                 <outlet property="supernova" destination="Vg6-j7-uzR" id="mBw-03-VIL"/>
+                <outlet property="supernovaMenuItem" destination="L9r-Z5-p9p" id="nX6-0c-ypZ"/>
+                <outlet property="typeMenu" destination="0gH-vs-PEu" id="ZXm-C2-IJX"/>
             </connections>
         </customObject>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
@@ -679,7 +686,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box boxType="custom" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="bQN-qd-ooi" userLabel="VizContainer">
+                    <box boxType="custom" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="bQN-qd-ooi" userLabel="VizContainer" customClass="VisualizerContainer" customModule="Visualizer" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
                         <view key="contentView" id="p8c-bh-blD">
                             <rect key="frame" x="0.0" y="0.0" width="450" height="300"/>
@@ -706,12 +713,125 @@
                         </view>
                         <color key="fillColor" red="0.38005165064896079" green="0.77270383883248728" blue="0.17836356833762101" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </box>
+                    <box hidden="YES" boxType="custom" borderType="none" borderWidth="0.0" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="pzX-o2-Paf" userLabel="Options Box">
+                        <rect key="frame" x="0.0" y="0.0" width="450" height="100"/>
+                        <view key="contentView" id="QAb-Fw-tN4">
+                            <rect key="frame" x="0.0" y="0.0" width="450" height="100"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vyz-Lg-mZi">
+                                    <rect key="frame" x="7" y="70" width="126" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Visualization Type:" id="a90-ZW-wD0">
+                                        <font key="font" usesAppearanceFont="YES"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QhA-CH-GIO">
+                                    <rect key="frame" x="7" y="39" width="107" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Low Amplitude:" id="07j-zf-N6X">
+                                        <font key="font" usesAppearanceFont="YES"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tf3-7b-JYf">
+                                    <rect key="frame" x="7" y="11" width="107" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" title="Bands:" id="ntB-Hm-jxG">
+                                        <font key="font" usesAppearanceFont="YES"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="moy-YH-CwO" userLabel="Visualization Type Menu">
+                                    <rect key="frame" x="137" y="64" width="304" height="25"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <popUpButtonCell key="cell" type="push" title="Spectrogram" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="4Lr-n8-SL4" id="IUr-jy-yBd">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                        <menu key="menu" id="0gH-vs-PEu">
+                                            <items>
+                                                <menuItem title="Spectrogram" state="on" id="4Lr-n8-SL4">
+                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                </menuItem>
+                                                <menuItem title="Supernova" id="L9r-Z5-p9p">
+                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                </menuItem>
+                                                <menuItem title="Disco Ball" id="6Uf-Vd-5t3">
+                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                </menuItem>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <action selector="changeTypeAction:" target="QkM-WI-cqD" id="S8p-WN-dhF"/>
+                                    </connections>
+                                </popUpButton>
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="viM-SK-uxp" userLabel="Bands Menu">
+                                    <rect key="frame" x="137" y="4" width="304" height="25"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <popUpButtonCell key="cell" type="push" title="10" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="10" imageScaling="proportionallyDown" inset="2" selectedItem="jhc-Rs-7VD" id="jvW-80-KQe">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="system"/>
+                                        <menu key="menu" id="UGu-bW-2Yl">
+                                            <items>
+                                                <menuItem title="10" state="on" tag="10" id="jhc-Rs-7VD">
+                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                </menuItem>
+                                                <menuItem title="27" tag="27" id="4Kz-34-a0A">
+                                                    <modifierMask key="keyEquivalentModifierMask"/>
+                                                </menuItem>
+                                            </items>
+                                        </menu>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <action selector="changeNumberOfBandsAction:" target="QkM-WI-cqD" id="6HL-g9-Hzf"/>
+                                    </connections>
+                                </popUpButton>
+                                <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LZh-k2-rk3">
+                                    <rect key="frame" x="139" y="36" width="25" height="25"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <color key="color" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    <connections>
+                                        <action selector="setColorsAction:" target="QkM-WI-cqD" id="KrS-PD-g0E"/>
+                                    </connections>
+                                </colorWell>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eOq-Jw-pc3">
+                                    <rect key="frame" x="281" y="39" width="107" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" title="High Amplitude:" id="2t8-Es-GCj">
+                                        <font key="font" usesAppearanceFont="YES"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                                <colorWell fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dSt-eT-uU8">
+                                    <rect key="frame" x="413" y="36" width="25" height="25"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <color key="color" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <connections>
+                                        <action selector="setColorsAction:" target="QkM-WI-cqD" id="KTe-oc-Yfj"/>
+                                    </connections>
+                                </colorWell>
+                            </subviews>
+                        </view>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="100" id="KBM-V9-F9c"/>
+                        </constraints>
+                        <color key="fillColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </box>
                 </subviews>
                 <constraints>
                     <constraint firstItem="bQN-qd-ooi" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="5aI-Hd-CLp"/>
                     <constraint firstItem="bQN-qd-ooi" firstAttribute="top" secondItem="EiT-Mj-1SZ" secondAttribute="top" id="LjT-cG-K8M"/>
                     <constraint firstAttribute="bottom" secondItem="bQN-qd-ooi" secondAttribute="bottom" id="ZtG-xQ-rO5"/>
+                    <constraint firstAttribute="trailing" secondItem="pzX-o2-Paf" secondAttribute="trailing" id="arY-mg-VeC"/>
+                    <constraint firstItem="pzX-o2-Paf" firstAttribute="leading" secondItem="EiT-Mj-1SZ" secondAttribute="leading" id="mMT-EY-L2m"/>
                     <constraint firstAttribute="trailing" secondItem="bQN-qd-ooi" secondAttribute="trailing" id="plG-h4-CVp"/>
+                    <constraint firstAttribute="bottom" secondItem="pzX-o2-Paf" secondAttribute="bottom" id="vin-b2-EuT"/>
                 </constraints>
             </view>
             <userDefinedRuntimeAttributes>
@@ -719,7 +839,7 @@
                     <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="-220.5" y="-136"/>
+            <point key="canvasLocation" x="-221" y="-136"/>
         </window>
     </objects>
 </document>

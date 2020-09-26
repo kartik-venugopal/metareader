@@ -2,6 +2,8 @@ import SpriteKit
 
 class Supernova: AuralSKView, VisualizerViewProtocol {
     
+    let type: VisualizationType = .supernova
+    
     var ring: SKShapeNode!
     private lazy var gradientImage: NSImage = NSImage(named: "Supernova")!
     private lazy var gradientTexture = SKTexture(image: gradientImage)

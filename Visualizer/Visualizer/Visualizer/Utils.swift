@@ -22,6 +22,13 @@ extension NSView {
         self.topAnchor.constraint(equalTo: otherView.topAnchor),
         self.bottomAnchor.constraint(equalTo: otherView.bottomAnchor)])
     }
+    
+    func removeAllTrackingAreas() {
+        
+        for area in self.trackingAreas {
+            self.removeTrackingArea(area)
+        }
+    }
 }
 
 extension NSColor{
