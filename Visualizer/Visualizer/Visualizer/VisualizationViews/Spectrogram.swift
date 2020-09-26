@@ -18,12 +18,11 @@ class AuralSKView: SKView {
 class Spectrogram: AuralSKView, VisualizerViewProtocol {
     
     var data: FrequencyData!
-    let magnitudeRange: ClosedRange<CGFloat> = 0...1
     
     var bars: [SpectrogramBar] = []
     
     var xMargin: CGFloat = 25
-    var yMargin: CGFloat = 0
+    var yMargin: CGFloat = 20
     
     var spacing: CGFloat = 10
     
@@ -86,7 +85,7 @@ class Spectrogram: AuralSKView, VisualizerViewProtocol {
     func update() {
         
         for i in 0..<numberOfBands {
-            bars[i].magnitude = CGFloat(FrequencyData.bands[i].maxVal).clamp(to: magnitudeRange)
+            bars[i].magnitude = CGFloat(FrequencyData.bands[i].maxVal.clamp(to: fftMagnitudeRange))
         }
     }
 }

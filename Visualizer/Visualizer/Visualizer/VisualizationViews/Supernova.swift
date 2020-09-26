@@ -6,22 +6,26 @@ class Supernova: AuralSKView, VisualizerViewProtocol {
     private lazy var gradientImage: NSImage = NSImage(named: "Supernova")!
     private lazy var gradientTexture = SKTexture(image: gradientImage)
     
+    private var glowWidth: CGFloat = 50
+    
     func presentView() {
         
         if self.scene == nil {
+            
+            let frame = self.frame
             
             let scene = SKScene(size: self.bounds.size)
             scene.backgroundColor = NSColor.black
             scene.anchorPoint = CGPoint.zero
             
-            self.ring = SKShapeNode(circleOfRadius: 100)
-            ring.position = NSPoint(x: 220, y: 160)
+            self.ring = SKShapeNode(circleOfRadius: (frame.height / 2) - glowWidth)
+            ring.position = NSPoint(x: frame.width / 2, y: frame.height / 2)
             ring.fillColor = NSColor.black
             
             ring.strokeTexture = gradientTexture
             ring.strokeColor = startColor
             ring.lineWidth = 75
-            ring.glowWidth = 50
+            ring.glowWidth = glowWidth
             
             ring.alpha = 0
 
@@ -56,12 +60,17 @@ class Supernova: AuralSKView, VisualizerViewProtocol {
         self.endColor = endColor
     }
     
+    let updateActionDuration: TimeInterval = 0.05
+    let rotationAngle: CGFloat = -piOver180
+    
     func update() {
         
-        let peakMagnitude = CGFloat(FrequencyData.peakBassMagnitude.clamp(to: 0...1))
-        ring.strokeColor = startColor.interpolate(endColor, peakMagnitude)
-        ring.run(SKAction.scale(to: peakMagnitude, duration: 0.05))
+        let magnitude = CGFloat(FrequencyData.peakBassMagnitude.clamp(to: fftMagnitudeRange))
+        ring.strokeColor = startColor.interpolate(endColor, magnitude)
         
-        ring.zRotation -= piOver180
+        let scaleAction = SKAction.scale(to: magnitude, duration: updateActionDuration)
+        let rotateAction = SKAction.rotate(byAngle: rotationAngle, duration: updateActionDuration)
+        
+        ring.run(SKAction.sequence([scaleAction, rotateAction]))
     }
 }

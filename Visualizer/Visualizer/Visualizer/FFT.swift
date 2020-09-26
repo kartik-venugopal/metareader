@@ -2,6 +2,8 @@ import Foundation
 import Accelerate
 import AVFoundation
 
+let fftMagnitudeRange: ClosedRange<Float> = 0...1
+
 class FFT {
     
     static let instance: FFT = FFT()
@@ -80,7 +82,7 @@ class FFT {
         
         let bufferPtr: UnsafePointer<Float> = UnsafePointer(buffer.mBuffers.mData!.assumingMemoryBound(to: Float.self))
         
-        // Hann windowing to reduce the frequency leakage
+        // Hann windowing to reduce frequency leakage
         vDSP_hann_window(&window, windowSize_vDSPLength, vDSP_HANN_NORM_Int32)
         vDSP_vmul(bufferPtr, 1, window, 1, transferBuffer, 1, windowSize_vDSPLength)
         
@@ -98,12 +100,13 @@ class FFT {
         vDSP_vdbcon(&magnitudes, 1, &zeroDBReference, normalizedMagnitudes, 1, halfBufferSize_UInt, 1)
         vDSP_vsmul(normalizedMagnitudes, 1, vsMulScalar, normalizedMagnitudes, 1, halfBufferSize_UInt)
         
+        // Determine peak magnitudes for each of the bands we are interested in.
         for band in FrequencyData.bands {
             vDSP_maxv(normalizedMagnitudes.advanced(by: band.minIndex), 1, &band.maxVal, band.indexCount)
         }
 
         // Bass bands peak
-        vDSP_maxv(FrequencyData.bassBands.map {$0.maxVal}, 1, &FrequencyData.peakBassMagnitude, 2)
+        vDSP_maxv(FrequencyData.bassBands.map {$0.maxVal}, 1, &FrequencyData.peakBassMagnitude, UInt(FrequencyData.bassBands.count))
     }
     
     deinit {

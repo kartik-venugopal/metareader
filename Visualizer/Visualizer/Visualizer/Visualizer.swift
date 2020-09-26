@@ -14,6 +14,8 @@ protocol VisualizerViewProtocol {
 
 class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
     
+    @IBOutlet weak var containerView: NSView!
+    
     @IBOutlet weak var spectrogram: Spectrogram!
     @IBOutlet weak var supernova: Supernova!
     @IBOutlet weak var discoBall: DiscoBall!
@@ -31,11 +33,19 @@ class Visualizer: NSObject, PlayerOutputRenderObserver, NSMenuDelegate {
     
     override func awakeFromNib() {
         
+        [spectrogram, supernova, discoBall].forEach {$0?.anchorToView(containerView)}
+        
         AppDelegate.play = true
         
-        spectrogramMenuItem.representedObject = VisualizationType.spectrogram
-        supernovaMenuItem.representedObject = VisualizationType.supernova
-        discoBallMenuItem.representedObject = VisualizationType.discoBall
+        vizView = spectrogram
+        spectrogram.presentView()
+        
+        discoBall.dismissView()
+        supernova.dismissView()
+        
+//        spectrogramMenuItem.representedObject = VisualizationType.spectrogram
+//        supernovaMenuItem.representedObject = VisualizationType.supernova
+//        discoBallMenuItem.representedObject = VisualizationType.discoBall
     }
     
     @IBAction func changeTypeAction(_ sender: NSPopUpButton) {

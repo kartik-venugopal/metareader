@@ -13,34 +13,53 @@ UInt32,
 UInt32,
 UnsafeMutablePointer<AudioBufferList>?) -> Bool
 
-protocol PlayerOutputRenderObserver: AURenderCallbackDelegate {}
-
-@objc protocol AURenderCallbackDelegate {
-func performRender(inTimeStamp: AudioTimeStamp,
+protocol PlayerOutputRenderObserver {
+    
+    func performRender(inTimeStamp: AudioTimeStamp,
     inNumberFrames: UInt32,
     audioBuffer: AudioBufferList)
 }
 
 func renderCallback(inRefCon: UnsafeMutableRawPointer,
-ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
-inTimeStamp: UnsafePointer<AudioTimeStamp>,
-inBusNumber: UInt32,
-inNumberFrames: UInt32,
-ioData: UnsafeMutablePointer<AudioBufferList>?) -> OSStatus {
+                    ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
+                    inTimeStamp: UnsafePointer<AudioTimeStamp>,
+                    inBusNumber: UInt32,
+                    inNumberFrames: UInt32,
+                    ioData: UnsafeMutablePointer<AudioBufferList>?) -> OSStatus {
     
-    let delegate = unsafeBitCast(inRefCon, to: AURenderCallbackDelegate.self)
+    let delegate = unsafeBitCast(inRefCon, to: Player.self)
     
-    if ioActionFlags.pointee == .unitRenderAction_PostRender, let bufferList = ioData?.pointee {
+    if ioActionFlags.pointee == .unitRenderAction_PostRender, let bufferList = ioData?.pointee, let observer = delegate.outputRenderObserver {
         
-        delegate.performRender(inTimeStamp: inTimeStamp.pointee,
-                               inNumberFrames: inNumberFrames,
-                               audioBuffer: bufferList)
+        DispatchQueue.global(qos: .userInteractive).async {
+            observer.performRender(inTimeStamp: inTimeStamp.pointee, inNumberFrames: inNumberFrames, audioBuffer: bufferList)
+        }
     }
     
     return noErr
 }
 
-class Player: NSObject, AURenderCallbackDelegate {
+func deviceChanged(inRefCon: UnsafeMutableRawPointer,
+                   inUnit: AudioUnit,
+                   inID: AudioUnitPropertyID,
+                   inScope: AudioUnitScope,
+                   inElement: AudioUnitElement) {
+    
+    let player = unsafeBitCast(inRefCon, to: Player.self)
+    player.setPreferredBS()
+}
+
+func sampleRateChanged(inRefCon: UnsafeMutableRawPointer,
+                       inUnit: AudioUnit,
+                       inID: AudioUnitPropertyID,
+                       inScope: AudioUnitScope,
+                       inElement: AudioUnitElement) {
+    
+    let player = unsafeBitCast(inRefCon, to: Player.self)
+    player.setPreferredBS()
+}
+
+class Player: NSObject {
     
     let playerNode: AVAudioPlayerNode = AVAudioPlayerNode()
     let audioEngine = AVAudioEngine()
@@ -49,6 +68,8 @@ class Player: NSObject, AURenderCallbackDelegate {
     var file: URL?
     var avFile: AVAudioFile?
     var duration: Double?
+    
+    var outputAudioUnit: AudioUnit {audioEngine.outputNode.audioUnit!}
     
     var segmentFrames:AVAudioFrameCount?
     
@@ -71,8 +92,7 @@ class Player: NSObject, AURenderCallbackDelegate {
         audioEngine.attach(playerNode)
         audioEngine.connect(playerNode, to: audioEngine.outputNode, format: nil)
         
-        let au = audioEngine.outputNode.audioUnit!
-        AudioUnitAddRenderNotify(au, renderCallback, Unmanaged.passUnretained(self).toOpaque())
+        AudioUnitAddRenderNotify(outputAudioUnit, renderCallback, Unmanaged.passUnretained(self).toOpaque())
         
         // MARK: Get current device sample rate (and use it to set up FFT)
         
@@ -80,14 +100,14 @@ class Player: NSObject, AURenderCallbackDelegate {
         
         var sampleRate: Double = 0
         var sizeOfProp: UInt32 = UInt32(MemoryLayout<Double>.size)
-        var error = AudioUnitGetProperty(au, kAudioDevicePropertyActualSampleRate, kAudioUnitScope_Global, 0, &sampleRate, &sizeOfProp)
+        var error = AudioUnitGetProperty(outputAudioUnit, kAudioDevicePropertyActualSampleRate, kAudioUnitScope_Global, 0, &sampleRate, &sizeOfProp)
         
         print("\nDevice sample rate is: \(sampleRate)")
         
         // MARK: Get current buffer size
         
         var sizeOfUInt32: UInt32 = UInt32(MemoryLayout<UInt32>.size)
-        error += AudioUnitGetProperty(au, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &nativeBufferSize, &sizeOfUInt32)
+        error += AudioUnitGetProperty(outputAudioUnit, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &nativeBufferSize, &sizeOfUInt32)
         
         print("\nCURRENT Device buffer size is: \(nativeBufferSize)")
         
@@ -95,21 +115,49 @@ class Player: NSObject, AURenderCallbackDelegate {
         
         var range: AudioValueRange = AudioValueRange()
         var sizeOfRange: UInt32 = UInt32(MemoryLayout<AudioValueRange>.size)
-        error += AudioUnitGetProperty(au, kAudioDevicePropertyBufferFrameSizeRange, kAudioUnitScope_Global, 0, &range, &sizeOfRange)
+        error += AudioUnitGetProperty(outputAudioUnit, kAudioDevicePropertyBufferFrameSizeRange, kAudioUnitScope_Global, 0, &range, &sizeOfRange)
         
         print("\nRANGE is: \(range.mMinimum) to \(range.mMaximum)")
         
         // MARK: Set buffer size to desired size
         
         var newBufferSize: UInt32 = 2048
-        error += AudioUnitSetProperty(au, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &newBufferSize, sizeOfUInt32)
+        error += AudioUnitSetProperty(outputAudioUnit, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &newBufferSize, sizeOfUInt32)
         
         if error == noErr {
             FFT.instance.setUp(sampleRate: Float(sampleRate), bufferSize: Int(newBufferSize))
         }
         
-        playerNode.volume = 1
+        playerNode.volume = 0.7
         playerNode.pan = 0
+
+        // TODO: Attach a similar listener for sample rate and set up FFT accordingly.
+        AudioUnitAddPropertyListener(outputAudioUnit, kAudioOutputUnitProperty_CurrentDevice, deviceChanged, Unmanaged.passUnretained(self).toOpaque())
+    }
+    
+    func printBS() {
+        
+        var sizeOfUInt32: UInt32 = UInt32(MemoryLayout<UInt32>.size)
+        _ = AudioUnitGetProperty(outputAudioUnit, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &nativeBufferSize, &sizeOfUInt32)
+        
+        var sampleRate: Double = 0
+        var sizeOfProp: UInt32 = UInt32(MemoryLayout<Double>.size)
+        _ = AudioUnitGetProperty(outputAudioUnit, kAudioDevicePropertyActualSampleRate, kAudioUnitScope_Global, 0, &sampleRate, &sizeOfProp)
+        
+        print("\nCURRENT Device buffer size is: \(nativeBufferSize) AND sample rate is: \(sampleRate)")
+    }
+    
+    func setPreferredBS() {
+        
+        var newBufferSize: UInt32 = 2048
+        let sizeOfUInt32: UInt32 = UInt32(MemoryLayout<UInt32>.size)
+        let error = AudioUnitSetProperty(outputAudioUnit, kAudioDevicePropertyBufferFrameSize, kAudioUnitScope_Global, 0, &newBufferSize, sizeOfUInt32)
+        
+        if error == noErr {
+            print("\nSET PREF BS")
+        }
+        
+        printBS()
     }
     
     func restoreBufferSize() {

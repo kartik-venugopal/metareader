@@ -17,9 +17,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     private let player = Player()
     
+    @IBAction func printBS(_ sender: Any) {
+        player.printBS()
+    }
+    
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         
         NSColorPanel.shared.close()
+        
+        window.aspectRatio = NSSize(width: 1, height: 2.0/3.0)
         
         if Self.play {
             

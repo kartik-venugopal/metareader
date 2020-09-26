@@ -12,7 +12,7 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
     var floorNode: SCNNode!
     var floor: SCNFloor!
     
-    let gradientImage: NSImage = NSImage(named: "DiscoBall")!
+    let textureImage: NSImage = NSImage(named: "DiscoBall")!
     
     func presentView() {
         
@@ -35,7 +35,7 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
             node.opacity = 0
             
             node.position = SCNVector3(1, 2, 1)
-            ball.firstMaterial?.diffuse.contents = gradientImage.tinting(startColor)
+            ball.firstMaterial?.diffuse.contents = textureImage.tinting(startColor)
             ball.firstMaterial?.diffuse.wrapS = .clamp
             ball.firstMaterial?.diffuse.wrapT = .clamp
             
@@ -55,7 +55,7 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
             showsStatistics = false
             
             for level in 0...10 {
-                textureCache.append(gradientImage.tinting(startColor.interpolate(endColor, CGFloat(level) * 0.1)))
+                textureCache.append(textureImage.tinting(startColor.interpolate(endColor, CGFloat(level) * 0.1)))
             }
         }
         
@@ -71,7 +71,7 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
     func updateTextureCache() {
         
         for level in 0...10 {
-            textureCache[level] = gradientImage.tinting(startColor.interpolate(endColor, CGFloat(level) * 0.1))
+            textureCache[level] = textureImage.tinting(startColor.interpolate(endColor, CGFloat(level) * 0.1))
         }
     }
     
@@ -91,7 +91,7 @@ class DiscoBall: SCNView, VisualizerViewProtocol {
         SCNTransaction.begin()
         SCNTransaction.animationDuration = 0.05
         
-        let mag = CGFloat(FrequencyData.peakBassMagnitude.clamp(to: 0...1))
+        let mag = CGFloat(FrequencyData.peakBassMagnitude.clamp(to: fftMagnitudeRange))
         
         ball.radius = 1 + (mag / 4.0)
         node.position = SCNVector3(1, 2, 1)
